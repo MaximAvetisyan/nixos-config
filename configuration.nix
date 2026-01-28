@@ -2,52 +2,66 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 let
   home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-25.11.tar.gz";
 in
 {
- # Enable OpenGL
-  hardware.graphics = {
-    enable = true;
-  };
-
   # Load nvidia driver for Xorg and Wayland
   services.xserver.videoDrivers = ["nvidia"];
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
 
-  hardware.nvidia = {
+  hardware = {
+    bluetooth = {
+      enable = true;
+      settings = {
+        General = {
+          Experimental = true;
+          ControllerMode = "dual"; 
+        };
+      };
+    };
 
-    # Modesetting is required.
-    modesetting.enable = true;
-
-    # Nvidia power management. Experimental, and can cause sleep/suspend to fail.
-    # Enable this if you have graphical corruption issues or application crashes after waking
-    # up from sleep. This fixes it by saving the entire VRAM memory to /tmp/ instead 
-    # of just the bare essentials.
-    powerManagement.enable = false;
-
-    # Fine-grained power management. Turns off GPU when not in use.
-    # Experimental and only works on modern Nvidia GPUs (Turing or newer).
-    powerManagement.finegrained = false;
-
-    # Use the NVidia open source kernel module (not to be confused with the
-    # independent third-party "nouveau" open source driver).
-    # Support is limited to the Turing and later architectures. Full list of 
-    # supported GPUs is at: 
-    # https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus 
-    # Only available from driver 515.43.04+
-    open = false;
-
-    # Enable the Nvidia settings menu,
-	# accessible via `nvidia-settings`.
-    nvidiaSettings = true;
-
-    # Optionally, you may need to select the appropriate driver version for your specific GPU.
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    graphics = {
+      enable = true;
+    };
+ 
+    nvidia = {
+  
+      # Modesetting is required.
+      modesetting.enable = true;
+  
+      # Nvidia power management. Experimental, and can cause sleep/suspend to fail.
+      # Enable this if you have graphical corruption issues or application crashes after waking
+      # up from sleep. This fixes it by saving the entire VRAM memory to /tmp/ instead 
+      # of just the bare essentials.
+      powerManagement.enable = false;
+  
+      # Fine-grained power management. Turns off GPU when not in use.
+      # Experimental and only works on modern Nvidia GPUs (Turing or newer).
+      powerManagement.finegrained = false;
+  
+      # Use the NVidia open source kernel module (not to be confused with the
+      # independent third-party "nouveau" open source driver).
+      # Support is limited to the Turing and later architectures. Full list of 
+      # supported GPUs is at: 
+      # https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus 
+      # Only available from driver 515.43.04+
+      open = false;
+  
+      # Enable the Nvidia settings menu,
+    # accessible via `nvidia-settings`.
+      nvidiaSettings = true;
+  
+      # Optionally, you may need to select the appropriate driver version for your specific GPU.
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
+    };
   };
 
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
+  home-manager.users.max = import ./home.nix;
 
   imports =
     [ 
@@ -56,13 +70,95 @@ in
     ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  # Use latest kernel.
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot = {
+    loader = {
+    systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+  };
+    kernelPackages = pkgs.linuxPackages_latest;
+  };
 
   networking.hostName = "nixos"; # Define your hostname.
+  services.zapret = {
+    enable = true;
+    udpSupport = true;
+    udpPorts = [ "50000:50099" "443" ];
+    params = [
+      "--dpi-desync-any-protocol=1" # udp support
+      "--dpi-desync=fake,disorder2"
+      "--dpi-desync-ttl=1"
+      "--dpi-desync-autottl=2"
+      "--dpi-desync-repeats=2"
+    ];
+    whitelist = [
+        "googleusercontent.com"
+        "accounts.google.com"
+        "googleadservices.com"
+        "googlevideo.com"
+        "gvt1.com"
+        "jnn-pa.googleapis.com"
+        "play.google.com"
+        "wide-youtube.l.google.com"
+        "youtu.be"
+        "youtube-nocookie.com"
+        "youtube-ui.l.google.com"
+        "youtube.com"
+        "youtube.googleapis.com"
+        "youtubeembeddedplayer.googleapis.com"
+        "youtubei.googleapis.com"
+        "yt-video-upload.l.google.com"
+        "yt.be"
+        "ytimg.com"
+        "ggpht.com"
+  "cloudflare-ech.com"
+  "encryptedsni.com"
+  "cloudflareaccess.com"
+  "cloudflareapps.com"
+  "cloudflarebolt.com"
+  "cloudflareclient.com"
+  "cloudflareinsights.com"
+  "cloudflareok.com"
+  "cloudflarepartners.com"
+  "cloudflareportal.com"
+  "cloudflarepreview.com"
+  "cloudflareresolve.com"
+  "cloudflaressl.com"
+  "cloudflarestatus.com"
+  "cloudflarestorage.com"
+  "cloudflarestream.com"
+  "cloudflaretest.com"
+  "dis.gd"
+  "discord-attachments-uploads-prd.storage.googleapis.com"
+  "discord.app"
+  "discord.co"
+  "discord.com"
+  "discord.design"
+  "discord.dev"
+  "discord.gift"
+  "discord.gifts"
+  "discord.gg"
+  "discord.media"
+  "discord.new"
+  "discord.store"
+  "discord.status"
+  "discord-activities.com"
+  "discordactivities.com"
+  "discordapp.com"
+  "discordapp.net"
+  "discordcdn.com"
+  "discordmerch.com"
+  "discordpartygames.com"
+  "discordsays.com"
+  "discordsez.com"
+  "discordstatus.com"
+  "frankerfacez.com"
+  "ffzap.com"
+  "betterttv.net"
+  "7tv.app"
+  "7tv.io"
+  "localizeapi.com"
+      ];
+  };  
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -90,23 +186,57 @@ in
     LC_TIME = "ru_RU.UTF-8";
   };
 
-  # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
-  };
+  #  Pipewire as a bluetooth audio for AirPods
+  security.rtkit.enable = true;
 
-  # Display manager
-  services.greetd = {
-    enable = true;
-    settings = {
-      default_session = {
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet \
-          --time --time-format '%I:%M %p | %a • %h | %F' \
-          --cmd 'uwsm start hyprland'";
-        user    = "greeter";
+  # Configure keymap in X11
+  services = {
+    xserver.xkb = {
+      layout = "us,ru";
+      variant = "";
+      options = "grp:alt_shift_toggle";
+    };
+  
+    #Bluetooth
+    blueman.enable = true;
+    
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+      jack.enable = true;
+    };
+    
+    pipewire.wireplumber.extraConfig.bluetoothEnhancements = {
+      "monitor.bluez.properties" = {
+        "bluez5.enable-sbc-xq" = true;
+        "bluez5.enable-msbc" = true;
+        "bluez5.enable-hw-volume" = true;
+        "bluez5.roles" = [ "hsp_hs" "hsp_ag" "hfp_hf" "hfp_ag" "a2dp_sink" "a2dp_source" ];
+        "bluez5.codecs" = [ "sbc" "sbc_xq" "aac" ];
       };
     };
+    
+    #Display manager
+    greetd = {
+      enable = true;
+      settings = {
+        initial_session = {
+          command = "${pkgs.uwsm}/bin/uwsm start hyprland-uwsm.desktop";
+          user = "max";
+        };
+        default_session = {
+          command = "${pkgs.tuigreet}/bin/tuigreet --greeting 'Welcome!' --asterisks --remember --remember-user-session --time --cmd '${pkgs.uwsm}/bin/uwsm start hyprland-uwsm.desktop'";
+          user = "greeter";
+        };
+      };
+    };
+    
+    printing = {
+      enable = true;
+    };
+
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -117,151 +247,63 @@ in
     packages = with pkgs; [];
   };
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  programs.hyprland = {
-	enable = true;
-	withUWSM = true;
-	xwayland.enable = true;
-  };
+  programs = {
 
-  programs.waybar.enable = true;
-
-  home-manager.users.max = {
-    home.stateVersion = "25.11";
-    programs.waybar = {
+    steam = {
       enable = true;
-      systemd.enable = true; # Automatically starts waybar with your session
-      
-      # Layout and Module Settings
-      settings = [{
-        layer = "top";
-        position = "top";
-        height = 30;
-        modules-left = [ "hyprland/workspaces" ];
-        modules-center = [ "clock" ];
-        modules-right = [ "tray" ];
-
-        # Module-specific configurations
-        "hyprland/workspaces" = {
-        	format = "{name}"; # Shows only the number/name
-        	on-click = "activate";
-        	sort-by-number = true;
-        	all-outputs = true;
-        	active-only = false;
-        };
-
-        clock = {
-          format = "{:%H:%M}  ";
-          tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
-        };
-
-      }];
-
-      # CSS Styling
-      style = ''
-        * {
-          border: none;
-          font-family: "JetBrainsMono Nerd Font";
-          font-size: 14px;
-        }
-        window#waybar {
-          background-color: rgba(26, 27, 38, 0.9);
-          border-bottom: 2px solid #7aa2f7;
-          color: #c0caf5;
-        }
-        #workspaces button {
-          padding: 0 5px;
-          color: #7aa2f7;
-        }
-        #workspaces button.active {
-          color: #bb9af7;
-        }
-        #clock {
-          padding: 0 10px;
-        }
-      '';
+      gamescopeSession.enable = true;
     };
-    home.pointerCursor = {
-      gtk.enable = true;
-      x11.enable = true;
-      package = pkgs.apple-cursor;
-      name = "macOS";
-      size = 24;
+
+    hyprlock.enable = true;
+
+    gamemode.enable = true;
+
+    zsh.enable = true;
+
+    hyprland = {
+        enable = true;
+        withUWSM = true; # Это создаст hyprland-uwsm.desktop
     };
 
   };
-  
 
   environment.systemPackages = with pkgs; [
 
-	neovim
-	wget
-	git
-	curl
-	chromium
-	pkgs.ghostty
-	pkgs.kitty
-	pkgs.apple-cursor
-	go
-	unzip
-	zig
-	clang
-	tmux
-	greetd.tuigreet
-	cmake
-	wofi
-	waybar
-	hyprpaper
-	gcc
+  neovim
+  tmux
+  wl-clipboard
+  wlogout
+  hyprlock
+  curl
+  wget
+  unzip
+  git
+  cmake
+  gcc
+  clang
+  go
+  zig
+  chromium
+  pkgs.ghostty
+  pkgs.apple-cursor
+  tuigreet
+  wofi
+  waybar
+  hyprpaper
+  hyprshot
+  #Printer package
+  pkgs.splix
+  pavucontrol
+  protonup-ng
+  lutris
   ];
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
   fonts.packages = with pkgs; [
-  	meslo-lgs-nf
+    meslo-lgs-nf
   ];
 
-  programs = {
-    zsh = {
-      enable = true;
-      enableCompletion = true;
-      autosuggestions.enable = false;
-      syntaxHighlighting.enable = false;
-      ohMyZsh = {
-        enable = true;
-        theme = "robbyrussell";
-        plugins = [
-	  "git"
-          "kubectl"
-          "helm"
-          "docker"
-        ];
-      };
-      shellAliases = {
-          ll = "ls -l";
-          update = "sudo nixos-rebuild switch";
-	  vim = "nvim";
-        };
-    };
-    tmux = {
-      enable = true;
-      clock24 = true;
-      plugins = with pkgs.tmuxPlugins; [
-        sensible
-        resurrect
-        vim-tmux-navigator
-      ];
-      extraConfig = ''
-        set -g mouse on
-        set -g base-index 1
-        setw -g pane-base-index 1
-        set -g status-style bg=default
-      '';
-    };
-  };
   users.defaultUserShell = pkgs.zsh;
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
