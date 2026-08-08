@@ -97,6 +97,10 @@
         bind-key -n M-x kill-window
         bind-key -n M-s choose-tree -s
         bind-key -n M-d detach-client
+        set -g extended-keys always
+        set -g extended-keys-format csi-u
+        set -as terminal-features 'xterm*:extkeys'
+        set -as terminal-features 'alacritty:extkeys'
       '';
     };
 
