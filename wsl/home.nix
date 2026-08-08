@@ -18,6 +18,16 @@
     };
   };
 
+  home.packages = with pkgs; [
+    lua-language-server
+    gopls
+    rust-analyzer
+    rustc
+    cargo
+    rustfmt
+    basedpyright
+  ];
+
   programs = {
 
     git = {

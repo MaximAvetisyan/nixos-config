@@ -138,6 +138,8 @@ in
     };
   };
 
+  virtualisation.docker.enable = true;
+
   security.rtkit.enable = true;
 
   users = {
@@ -145,7 +147,7 @@ in
     users.max = {
       isNormalUser = true;
       description = "max";
-      extraGroups = [ "networkmanager" "wheel" "sudo" "input" ];
+      extraGroups = [ "networkmanager" "wheel" "sudo" "input" "docker" ];
       packages = with pkgs; [];
     };
   };
