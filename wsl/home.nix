@@ -36,6 +36,10 @@
       autosuggestion.enable = false;
       syntaxHighlighting.enable = false;
 
+      initContent = ''
+        setopt no_beep
+      '';
+
       oh-my-zsh = {
         enable = true;
         theme = "robbyrussell";
@@ -51,7 +55,7 @@
         ll = "ls -la";
         update = "sudo nixos-rebuild switch --flake ~/.config/nixos-config#wsl";
         rebuild = "sudo nixos-rebuild switch --flake ~/.config/nixos-config#wsl";
-        cs = "tmux has-session -t cs 2>/dev/null && tmux attach -t cs || tmux new-session -d -s cs -n nvim nvim \\; new-window -n zsh \\; new-window -n opencode opencode \\; attach -t cs";
+        cs = "tmux has-session -t cs 2>/dev/null && tmux attach -t cs || tmux new-session -d -s cs -c \"$PWD\" -n nvim nvim \\; new-window -c \"$PWD\" -n zsh \\; new-window -c \"$PWD\" -n opencode opencode \\; attach -t cs";
         clean = "sudo nix-collect-garbage -d";
         vim = "nvim";
         grep = "rg";
@@ -81,6 +85,7 @@
         bind-key -n M-c new-window
         bind-key -n M-x kill-window
         bind-key -n M-s choose-tree -s
+        bind-key -n M-d detach-client
       '';
     };
 

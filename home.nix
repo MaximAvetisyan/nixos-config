@@ -19,7 +19,7 @@
       ELECTRON_OZONE_PLATFORM_HINT = "auto";
       EDITOR = "nvim";
       VISUAL = "nvim";
-      STEAM_EXTRA_COMPAT_TOOLS_PATH = 
+      STEAM_EXTRA_COMPAT_TOOLS_PATH =
         "\${HOME}/.steam/root/compatabilitytools.d";
       };
   };
@@ -65,9 +65,9 @@
           "tray"
           "pulseaudio"
           "custom/notification"
-          "hyprland/language" 
+          "hyprland/language"
           "custom/exit"
-        ];  
+        ];
 
       "pulseaudio" = {
         format = "{icon} {volume}%";
@@ -157,13 +157,13 @@
           background: rgba(43, 48, 59, 0.5);
           color: #ffffff;
         }
-    
-        .modules-right > widget > label, 
+
+        .modules-right > widget > label,
         .modules-right > widget > box {
           margin-left: 5px;
           margin-right: 5px;
         }
-    
+
     '';
     };
 
@@ -182,7 +182,7 @@
       enableCompletion = true;
       autosuggestion.enable = false;
       syntaxHighlighting.enable = false;
-      
+
       oh-my-zsh = {
         enable = true;
         theme = "robbyrussell";
@@ -218,7 +218,7 @@
         set -g base-index 1
         setw -g pane-base-index 1
         set -g status-style bg=default
-	bind-key -n M-1 select-window -t 1
+	    bind-key -n M-1 select-window -t 1
         bind-key -n M-2 select-window -t 2
         bind-key -n M-3 select-window -t 3
         bind-key -n M-4 select-window -t 4
@@ -254,12 +254,12 @@
           font-family: "MesloLGS NF";
           font-size: 15px;
         }
-    
+
         #outer-box {
           margin: 0px;
           padding: 0px;
         }
-    
+
         #input {
           margin: 0px;
           padding: 15px;
@@ -270,16 +270,16 @@
           background-color: transparent;
           outline: none;
         }
-    
+
         #inner-box {
           margin: 8px;
           background-color: transparent;
         }
-    
+
         #scroll {
           border: none;
         }
-    
+
         #entry {
           padding: 10px;
           margin: 2px 0px;
@@ -287,12 +287,12 @@
           border-radius: 8px;
           color: #b3b3b3;
         }
-    
+
         #entry:selected {
           background-color: rgba(255, 255, 255, 0.1);
           outline: none;
         }
-    
+
         #text:selected {
           color: #ffffff;
           font-weight: bold;
@@ -305,7 +305,7 @@
   wayland.windowManager.hyprland = {
     enable = true;
     systemd.enable = false;
-    
+
     settings = {
 
       monitor = [
@@ -323,12 +323,12 @@
 	"udiskie"
 	"hyprlock"
       ];
-  
+
       env = [
         "XCURSOR_SIZE,24"
         "HYPRCURSOR_SIZE,24"
       ];
-    
+
       general = {
         gaps_in = 5;
         gaps_out = 20;
@@ -339,20 +339,20 @@
         allow_tearing = false;
         layout = "dwindle";
       };
-    
+
       decoration = {
         rounding = 10;
         rounding_power = 2.0;
         active_opacity = 1.0;
         inactive_opacity = 1.0;
-    
+
         shadow = {
           enabled = true;
           range = 4;
           render_power = 3;
           color = "rgba(1a1a1aee)";
         };
-    
+
         blur = {
           enabled = true;
           size = 3;
@@ -360,7 +360,7 @@
           vibrancy = 0.1696;
         };
       };
-    
+
       animations = {
         enabled = "yes";
         bezier = [
@@ -390,34 +390,34 @@
           "zoomFactor, 1, 7, quick"
         ];
       };
-    
+
       dwindle = {
         pseudotile = true;
         preserve_split = true;
       };
-    
+
       master = {
         new_status = "master";
       };
-    
+
       misc = {
         force_default_wallpaper = -1;
         disable_hyprland_logo = false;
       };
-    
+
       input = {
         kb_layout = "us,ru";
         kb_options = "grp:alt_shift_toggle";
         follow_mouse = 1;
         sensitivity = 0;
         touchpad.natural_scroll = true;
-      }; 
+      };
 
       device = [{
         name = "epic-mouse-v1";
         sensitivity = -0.5;
       }];
-    
+
       "$mainMod" = "SUPER";
       bind = [
         "$mainMod, Return, exec, $terminal"
@@ -429,12 +429,12 @@
         "$mainMod, P, pseudo,"
         "$mainMod, J, togglesplit,"
         "$mainMod SHIFT, q, exec, hyprlock"
-        
+
         "$mainMod, h, movefocus, l"
         "$mainMod, l, movefocus, r"
         "$mainMod, k, movefocus, u"
         "$mainMod, j, movefocus, d"
-    
+
         "$mainMod, 1, workspace, 1"
         "$mainMod, 2, workspace, 2"
         "$mainMod, 3, workspace, 3"
@@ -445,7 +445,7 @@
         "$mainMod, 8, workspace, 8"
         "$mainMod, 9, workspace, 9"
         "$mainMod, 0, workspace, 10"
-    
+
         "$mainMod SHIFT, 1, movetoworkspace, 1"
         "$mainMod SHIFT, 2, movetoworkspace, 2"
         "$mainMod SHIFT, 3, movetoworkspace, 3"
@@ -456,12 +456,12 @@
         "$mainMod SHIFT, 8, movetoworkspace, 8"
         "$mainMod SHIFT, 9, movetoworkspace, 9"
         "$mainMod SHIFT, 0, movetoworkspace, 10"
-    
+
         "$mainMod, S, togglespecialworkspace, magic"
         "$mainMod SHIFT, S, movetoworkspace, special:magic"
-    
+
       ];
-    
+
       bindel = [
         ",XF86AudioRaiseVolume, exec, wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"
         ",XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
