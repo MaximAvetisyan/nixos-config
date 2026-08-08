@@ -72,6 +72,7 @@
         yank
       ];
       extraConfig = ''
+        set -ga terminal-features ",*:synchronized-updates"
         set -s set-clipboard on
         set -g mouse on
         set -g base-index 1
