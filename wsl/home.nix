@@ -55,7 +55,7 @@
         ll = "ls -la";
         update = "sudo nixos-rebuild switch --flake ~/.config/nixos-config#wsl";
         rebuild = "sudo nixos-rebuild switch --flake ~/.config/nixos-config#wsl";
-        cs = "tmux has-session -t cs 2>/dev/null && tmux attach -t cs || tmux new-session -d -s cs -c \"$PWD\" -n nvim nvim \\; new-window -c \"$PWD\" -n zsh \\; new-window -c \"$PWD\" -n opencode opencode \\; attach -t cs";
+        cs = "tmux has-session -t \"$(basename \"$PWD\")\" 2>/dev/null && tmux attach -t \"$(basename \"$PWD\")\" || tmux new-session -d -s \"$(basename \"$PWD\")\" -c \"$PWD\" -n nvim nvim \\; new-window -c \"$PWD\" -n zsh \\; new-window -c \"$PWD\" -n opencode opencode \\; attach -t \"$(basename \"$PWD\")\"";
         clean = "sudo nix-collect-garbage -d";
         vim = "nvim";
         grep = "rg";
